@@ -1,5 +1,6 @@
 <script setup>
 import { ref, toRef, watchEffect, watch } from 'vue'
+import debounce from 'just-debounce-it'
 
 import Movies from './components/Movies.vue'
 import { useMovies } from './hooks/useMovies'
@@ -42,6 +43,19 @@ const handleSort = () => {
   sort.value = !sort.value
 }
 
+const debouncedGetMovies = debounce(() => {
+  // console.log('search', search.value)
+  getMovies({ search: search.value })
+}, 300)
+
+const handleChange = (event) => {
+  const newSearch = event.target.value
+  search.value = newSearch
+  // console.log(newSearch)
+  debouncedGetMovies()
+
+}
+
 </script>
 
 <template>
@@ -52,9 +66,9 @@ const handleSort = () => {
         <input :style="{
           border: '1px solid transparent',
           borderColor: error ? 'red' : 'transparent'
-        }" type="text" placeholder="Avangers, Star Wars, The Matrix..." v-model="search" />
+        }" type="text" placeholder="Avengers, Star Wars, The Matrix..." v-model="search" @input="handleChange" />
         <button type="submit">Buscar</button>
-        <input type='checkbox' @change="handleSort" :checked="sort" />
+        <input type='checkbox' @change="handleSort" :checked="sort" /> Ordenar por nombre
       </form>
       <p style="color: red;"> {{ error }} </p>
     </header>

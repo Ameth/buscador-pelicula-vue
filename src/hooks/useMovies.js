@@ -23,7 +23,7 @@ export function useMovies({ search, sort = false }) {
     }
   }
 
-  console.log('sort es:', sort)
+  //   console.log('sort es:', sort)
 
   const sortedMovies = () => {
     return sort
